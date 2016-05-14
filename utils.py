@@ -1,39 +1,30 @@
-import codecs
-from itertools import count
+
 import numpy as np
+from sklearn.cross_validation import KFold
 
 
-def read_formality_dataset(max_features=5000):
-    c = count(2)
-    d = {}
-    lines = codecs.open('formality.lahiri.dataset').read().splitlines()
-    y = []
-    X = []
-    for line in lines:
-        try:
-            score, sentence = line.split('\t')
-        except ValueError:
-            continue
-        y.append(float(score))
-        s = []
-        for token in sentence.split():
-            idx = d.get(token, None)
-            if idx is None:
-                idx = c.next()
-                if idx < max_features:
-                    d[token] = idx
-                else:
-                    d[token] = 1
-                    idx = 1
-            s.append(idx)
-        X.append(s)
+def cross_validate(model, X, y, n_folds, batch_size, num_epoch, func_for_evaluation=None):
 
+    # let's shuffle first.
     seed = 5
     np.random.seed(seed)
     np.random.shuffle(X)
     np.random.seed(seed)
     np.random.shuffle(y)
 
-    print len(X), len(y)
+    X = np.array(X)
+    y = np.array(y)
 
-    return (X[:9000], y[:9000]), (X[9000:], y[9000:])
+    scores = np.zeros(n_folds)
+    kf = KFold(len(y), n_folds=n_folds)
+    for i, (train_index, test_index) in enumerate(kf):
+        X_train, y_train = X[train_index, :], y[train_index]
+        X_test, y_test = X[test_index, :], y[test_index]
+        model.fit(X_train, y_train,
+                  batch_size=batch_size,
+                  nb_epoch=num_epoch)
+
+        predictions = model.predict(X_test)
+        scores[i] = func_for_evaluation(predictions[:, 0].tolist(), y_test)[0]
+
+    print "{}-Fold cross validation score: {}".format(n_folds, scores.mean())

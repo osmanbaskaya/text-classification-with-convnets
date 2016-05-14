@@ -1,12 +1,3 @@
-'''This example demonstrates the use of Convolution1D for text classification.
-
-Gets to 0.88 test accuracy after 2 epochs. 
-90s/epoch on Intel i5 2.4Ghz CPU.
-10s/epoch on Tesla K40 GPU.
-
-'''
-
-from __future__ import print_function
 import numpy as np
 np.random.seed(1337)  # for reproducibility
 
@@ -31,7 +22,7 @@ filter_length = 3
 hidden_dims = 250
 nb_epoch = 3
 
-print('Loading data...')
+print 'Loading data...'
 # (X_train, y_train), (X_test, y_test) = imdb.load_data(nb_words=max_features,
 #                                                       test_split=0.2)
 
@@ -39,16 +30,16 @@ print('Loading data...')
 (X_train, y_train), (X_test, y_test) = read_formality_dataset()
 
 
-print(len(X_train), 'train sequences')
-print(len(X_test), 'test sequences')
+print len(X_train), 'train sequences'
+print len(X_test), 'test sequences'
 
-print('Pad sequences (samples x time)')
+print 'Pad sequences (samples x time)'
 X_train = sequence.pad_sequences(X_train, maxlen=maxlen)
 X_test = sequence.pad_sequences(X_test, maxlen=maxlen)
-print('X_train shape:', X_train.shape)
-print('X_test shape:', X_test.shape)
+print 'X_train shape:', X_train.shape
+print 'X_test shape:', X_test.shape
 
-print('Build model...')
+print 'Build model...'
 model = Sequential()
 
 # we start off with an efficient embedding layer which maps
@@ -91,4 +82,4 @@ model.fit(X_train, y_train,
           validation_data=(X_test, y_test))
 
 predictions = model.predict(X_test)
-print(pearsonr(predictions[:, 0].tolist(), y_test))
+print pearsonr(predictions[:, 0].tolist(), y_test)
