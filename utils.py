@@ -25,6 +25,11 @@ def cross_validate(model, X, y, n_folds, batch_size, num_epoch, func_for_evaluat
                   nb_epoch=num_epoch)
 
         predictions = model.predict(X_test)
-        scores[i] = func_for_evaluation(predictions[:, 0].tolist(), y_test)[0]
+        score = func_for_evaluation(predictions[:, 0].tolist(), y_test)
+        try:
+            scores[i] = score[0]
+        except IndexError:
+            scores[i] = score
+
 
     print "{}-Fold cross validation score: {}".format(n_folds, scores.mean())
