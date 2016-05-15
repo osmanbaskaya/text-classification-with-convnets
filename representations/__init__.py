@@ -19,3 +19,5 @@ def get_embedding_weights(vocab, path=WORD2VEC_PATH):
             embedding_weights[idx, :] = model[word]
         else:
             print u"{} not found.".format(word)
+
+    return embedding_weights
