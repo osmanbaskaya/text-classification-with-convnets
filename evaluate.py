@@ -4,7 +4,7 @@ import sys
 import data
 from model import create_logistic_model, create_regression_model
 from utils import cross_validate
-from scipy.stats import pearsonr
+from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import accuracy_score
 
 
@@ -25,7 +25,7 @@ print >> sys.stderr, 'X_train shape:', X_train.shape
 
 if problem_type == 'regression':
     model = create_regression_model(maxlen, max_features)
-    cross_validate(model, X_train, y_train, n_folds, batch_size, nb_epoch, func_for_evaluation=pearsonr)
+    cross_validate(model, X_train, y_train, n_folds, batch_size, nb_epoch, func_for_evaluation=spearmanr)
 else:
     model = create_logistic_model(maxlen, max_features)
     cross_validate(model, X_train, y_train, n_folds, batch_size, nb_epoch, func_for_evaluation=accuracy_score)
