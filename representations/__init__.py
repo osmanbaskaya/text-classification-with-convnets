@@ -19,7 +19,10 @@ def get_embedding_weights(vocab, path=WORD2VEC_PATH):
         if word in model:
             embedding_weights[idx, :] = model[word]
         else:
-            print >> sys.stderr, u"{} not found.".format(word)
+            try:
+                print >> sys.stderr, u"{} not found.".format(word)
+            except UnicodeDecodeError:
+                pass
             embedding_weights[idx, :] = np.zeros(WORD2VEC_EMB_DIMENSION)
 
     return embedding_weights

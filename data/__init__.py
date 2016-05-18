@@ -1,6 +1,7 @@
 import codecs
 from itertools import count
 from keras.preprocessing import sequence
+from nltk.tokenize.treebank import TreebankWordTokenizer
 import numpy as np
 
 
@@ -13,6 +14,7 @@ def read(fn, test_percentage, maxlen, max_features, dataset_type, padding=True):
     :return:
     """
 
+    tokenizer = TreebankWordTokenizer()
     c = count(2)
     word_idx = {}
     lines = codecs.open(fn).read().splitlines()
@@ -25,7 +27,7 @@ def read(fn, test_percentage, maxlen, max_features, dataset_type, padding=True):
             continue
         y.append(label)
         s = []
-        for token in sentence.split():
+        for token in tokenizer.tokenize(sentence):
             idx = word_idx.get(token, None)
             if idx is None:
                 idx = c.next()
