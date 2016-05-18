@@ -4,7 +4,7 @@ import sys
 import data
 from model import create_logistic_model, create_regression_model
 from utils import cross_validate
-from scipy.stats import pearsonr
+from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import accuracy_score
 
 
@@ -18,15 +18,18 @@ maxlen = 20  # maximum length for each sentence.
 max_features = 25000  # length of the vocabulary.
 batch_size = 32
 nb_epoch = 3
+additional_num_words = 2  # "UNK" and "PADDING"
 
 
-(X_train, y_train), (_, _) = data.read(fn, 0.0, maxlen, max_features, problem_type)
+(X_train, y_train), (_, _), word_idx = data.read(fn, 0.0, maxlen, max_features, problem_type)
 print >> sys.stderr, 'X_train shape:', X_train.shape
 
+max_features = min(max_features, len(word_idx) + additional_num_words)
+
 if problem_type == 'regression':
-    model = create_regression_model(maxlen, max_features)
-    cross_validate(model, X_train, y_train, n_folds, batch_size, nb_epoch, func_for_evaluation=pearsonr)
+    model = create_regression_model(maxlen, max_features, word_idx)
+    cross_validate(model, X_train, y_train, n_folds, batch_size, nb_epoch, func_for_evaluation=spearmanr)
 else:
-    model = create_logistic_model(maxlen, max_features)
+    model = create_logistic_model(maxlen, max_features, word_idx)
     cross_validate(model, X_train, y_train, n_folds, batch_size, nb_epoch, func_for_evaluation=accuracy_score)
 

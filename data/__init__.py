@@ -1,6 +1,7 @@
 import codecs
 from itertools import count
 from keras.preprocessing import sequence
+from nltk.tokenize.treebank import TreebankWordTokenizer
 import numpy as np
 
 
@@ -13,8 +14,9 @@ def read(fn, test_percentage, maxlen, max_features, dataset_type, padding=True):
     :return:
     """
 
+    tokenizer = TreebankWordTokenizer()
     c = count(2)
-    d = {}
+    word_idx = {}
     lines = codecs.open(fn).read().splitlines()
     y = []
     X = []
@@ -25,14 +27,14 @@ def read(fn, test_percentage, maxlen, max_features, dataset_type, padding=True):
             continue
         y.append(label)
         s = []
-        for token in sentence.split():
-            idx = d.get(token, None)
+        for token in tokenizer.tokenize(sentence):
+            idx = word_idx.get(token, None)
             if idx is None:
                 idx = c.next()
                 if idx < max_features:
-                    d[token] = idx
+                    word_idx[token] = idx
                 else:
-                    d[token] = 1
+                    word_idx[token] = 1
                     idx = 1
             s.append(idx)
         X.append(s)
@@ -45,8 +47,8 @@ def read(fn, test_percentage, maxlen, max_features, dataset_type, padding=True):
         y = map(lambda e: float(e), y)
     else:
         label1, label2 = set(y)  # now supporting only binary classification.
-        d = {label1: 0, label2: 1}
-        y = map(lambda e: d[e], y)  # map labels 0/1.
+        word_idx = {label1: 0, label2: 1}
+        y = map(lambda e: word_idx[e], y)  # map labels 0/1.
 
     y = np.array(y)
 
@@ -54,4 +56,4 @@ def read(fn, test_percentage, maxlen, max_features, dataset_type, padding=True):
                                                           max(len(X) - num_instance_for_train, 0))
 
     return (X[:num_instance_for_train, :], y[:num_instance_for_train]), (X[num_instance_for_train:, :],
-                                                                         y[num_instance_for_train:])
+                                                                         y[num_instance_for_train:]), word_idx
