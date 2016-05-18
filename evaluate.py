@@ -20,13 +20,13 @@ batch_size = 32
 nb_epoch = 3
 
 
-(X_train, y_train), (_, _) = data.read(fn, 0.0, maxlen, max_features, problem_type)
+(X_train, y_train), (_, _), word_idx = data.read(fn, 0.0, maxlen, max_features, problem_type)
 print >> sys.stderr, 'X_train shape:', X_train.shape
 
 if problem_type == 'regression':
-    model = create_regression_model(maxlen, max_features)
+    model = create_regression_model(maxlen, max_features, word_idx)
     cross_validate(model, X_train, y_train, n_folds, batch_size, nb_epoch, func_for_evaluation=spearmanr)
 else:
-    model = create_logistic_model(maxlen, max_features)
+    model = create_logistic_model(maxlen, max_features, word_idx)
     cross_validate(model, X_train, y_train, n_folds, batch_size, nb_epoch, func_for_evaluation=accuracy_score)
 
