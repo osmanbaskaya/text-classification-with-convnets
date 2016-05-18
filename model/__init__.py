@@ -8,7 +8,7 @@ import sys
 
 
 # set parameters:
-embedding_dims = 50
+embedding_dims = 300
 nb_filter = 250
 filter_length = 3
 hidden_dims = 250
@@ -26,10 +26,6 @@ def __get_base_model(maxlen, max_features, word_idx=None):
     :return:
     """
 
-    if word_idx is not None:
-        print >> sys.stderr, 'Reading embeddings...'
-        embedding_weights = get_embedding_weights(word_idx)
-
     print >> sys.stderr, 'Build model...'
     model = Sequential()
 
@@ -37,11 +33,13 @@ def __get_base_model(maxlen, max_features, word_idx=None):
     # our vocab indices into embedding_dims dimensions
 
     if word_idx is not None:
+        print >> sys.stderr, 'Reading embeddings...'
+        embedding_weights = get_embedding_weights(word_idx)
         model.add(Embedding(max_features,
                             embedding_dims,
                             input_length=maxlen,
                             dropout=0.2,
-                            weights=embedding_weights))
+                            weights=[embedding_weights]))
     else:
         model.add(Embedding(max_features,
                             embedding_dims,

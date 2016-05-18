@@ -18,10 +18,13 @@ maxlen = 20  # maximum length for each sentence.
 max_features = 25000  # length of the vocabulary.
 batch_size = 32
 nb_epoch = 3
+additional_num_words = 2  # "UNK" and "PADDING"
 
 
 (X_train, y_train), (_, _), word_idx = data.read(fn, 0.0, maxlen, max_features, problem_type)
 print >> sys.stderr, 'X_train shape:', X_train.shape
+
+max_features = min(max_features, len(word_idx) + additional_num_words)
 
 if problem_type == 'regression':
     model = create_regression_model(maxlen, max_features, word_idx)
