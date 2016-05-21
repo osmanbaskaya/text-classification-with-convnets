@@ -18,7 +18,7 @@ def max_1d(X):
     return K.max(X, axis=1)
 
 
-def __get_base_model(maxlen, max_features, word_idx=None):
+def __get_base_model(maxlen, max_features, word_idx, use_pretrained_embeddings=False):
     """
     :param maxlen: sentence size. Longer sentences will be truncated.
     :param max_features: vocab size.
@@ -32,7 +32,7 @@ def __get_base_model(maxlen, max_features, word_idx=None):
     # we start off with an efficient embedding layer which maps
     # our vocab indices into embedding_dims dimensions
 
-    if word_idx is not None:
+    if use_pretrained_embeddings:
         print >> sys.stderr, 'Reading embeddings...'
         embedding_weights = get_embedding_weights(word_idx)
         model.add(Embedding(max_features,
@@ -68,8 +68,8 @@ def __get_base_model(maxlen, max_features, word_idx=None):
     return model
 
 
-def create_regression_model(maxlen, max_features, word_idx):
-    model = __get_base_model(maxlen, max_features, word_idx)
+def create_regression_model(maxlen, max_features, word_idx, use_pretrained_embeddings):
+    model = __get_base_model(maxlen, max_features, word_idx, use_pretrained_embeddings)
     model.add(Activation('linear'))
     model.compile(loss='mean_squared_error',
                   optimizer='adam',
@@ -77,8 +77,8 @@ def create_regression_model(maxlen, max_features, word_idx):
     return model
 
 
-def create_logistic_model(maxlen, max_features, word_idx=None):
-    model = __get_base_model(maxlen, max_features, word_idx)
+def create_logistic_model(maxlen, max_features, word_idx, use_pretrained_embeddings):
+    model = __get_base_model(maxlen, max_features, word_idx, use_pretrained_embeddings)
     model.add(Activation('softmax'))
     model.compile(loss='binary_crossentropy',
                   optimizer='adam',
