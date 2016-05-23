@@ -1,6 +1,7 @@
 import codecs
 from itertools import count
 from keras.preprocessing import sequence
+import sys
 from nltk.tokenize.treebank import TreebankWordTokenizer
 import numpy as np
 
@@ -46,9 +47,11 @@ def read(fn, test_percentage, maxlen, max_features, dataset_type, padding=True):
     if dataset_type == 'regression':
         y = map(lambda e: float(e), y)
     else:
-        label1, label2 = set(y)  # now supporting only binary classification.
-        word_idx = {label1: 0, label2: 1}
-        y = map(lambda e: word_idx[e], y)  # map labels 0/1.
+        set_y = set(y)
+        print >> sys.stderr, set_y
+        label1, label2 = set_y  # now supporting only binary classification.
+        labels = {label1: 0, label2: 1}
+        y = map(lambda e: labels[e], y)  # map labels 0/1.
 
     y = np.array(y)
 
