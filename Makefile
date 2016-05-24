@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 NUM_FOLD = 10
 PROBLEM_TYPE=regression
 USE_PRETRAINED_EMBEDDINGS=True
@@ -16,3 +18,6 @@ pretrained-models/%: datasets/% pretrained-models
 
 %.pred: datasets/% ${MODEL_DIR}
 	python predict.py $^ > $@
+	wc $@
+
+.SECONDARY:
