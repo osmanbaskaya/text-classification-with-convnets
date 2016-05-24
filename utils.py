@@ -33,3 +33,5 @@ def cross_validate(model, X, y, n_folds, batch_size, num_epoch, func_for_evaluat
 
 
     print "{}-Fold cross validation score: {}".format(n_folds, scores.mean())
+
+

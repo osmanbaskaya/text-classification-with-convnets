@@ -1,3 +1,4 @@
+import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Lambda
 from keras.layers import Embedding
@@ -84,3 +85,18 @@ def create_logistic_model(maxlen, max_features, word_idx, use_pretrained_embeddi
                   optimizer='adam',
                   metrics=['accuracy'])
     return model
+
+
+def train_model(model, X, y, batch_size, num_epoch):
+
+    np.random.seed(42)
+    idx = np.random.permutation(len(y))
+
+    X = np.array(X)
+    y = np.array(y)
+
+    X = X[idx, :]
+    y = y[idx]
+
+    model.fit(X, y, batch_size=batch_size, nb_epoch=num_epoch)
+
