@@ -1,4 +1,4 @@
-# formality-classifier-cnn
+#   Text Classification with ConvNets (Basic Keras Practices)
 CNN classifier for Formality in text.
 
 
