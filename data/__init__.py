@@ -6,7 +6,22 @@ from nltk.tokenize.treebank import TreebankWordTokenizer
 import numpy as np
 
 
-def read(fn, test_percentage, maxlen, max_features, dataset_type, padding=True):
+def testset_read(fn, word_idx, maxlen):
+    tokenizer = TreebankWordTokenizer()
+    lines = codecs.open(fn, encoding='utf8').read().splitlines()
+    X = []
+    for line in lines:
+        s = []
+        for token in tokenizer.tokenize(line):
+            idx = word_idx.get(token, 1)  # 1 is UNKNOWN word id
+            s.append(idx)
+        X.append(s)
+
+    X = sequence.pad_sequences(X, maxlen=maxlen)
+    return X
+
+
+def read(fn, test_percentage, maxlen, max_features, dataset_type):
     """
     :param fn: dataset filename.
     :param maxlen: maximum length for each sentence.
@@ -18,7 +33,7 @@ def read(fn, test_percentage, maxlen, max_features, dataset_type, padding=True):
     tokenizer = TreebankWordTokenizer()
     c = count(2)
     word_idx = {}
-    lines = codecs.open(fn).read().splitlines()
+    lines = codecs.open(fn, encoding='utf8').read().splitlines()
     y = []
     X = []
     for line in lines:
@@ -35,7 +50,6 @@ def read(fn, test_percentage, maxlen, max_features, dataset_type, padding=True):
                 if idx < max_features:
                     word_idx[token] = idx
                 else:
-                    word_idx[token] = 1
                     idx = 1
             s.append(idx)
         X.append(s)
