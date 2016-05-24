@@ -6,7 +6,7 @@ CNN classifier for Formality in text.
 
 In order to run cross validation on a dataset, you can just run:
 
-```
+```bash
 make cross-validate-formality.lahiri.dataset NUM_FOLD=10 PROBLEM_TYPE=regression
 ```
 
@@ -23,13 +23,13 @@ make cross-validate-formality.lahiri.classes.clean.dataset NUM_FOLD=10 PROBLEM_T
 
 Assume that we have formality datasets for emails and it is located in `datasets/formality-email`. You can run the following command; build and save a model in `pretrained-models` directory.
 
-```
-make pretrained-models/model-formality-email USE_PRETRAINED_EMBEDDINGS=False
+```bash
+make pretrained-models/formality-email USE_PRETRAINED_EMBEDDINGS=False
 ```
 
 If you want to use pretrained word embeddings (e.g., Word2Vec) then you can run this:
 
-```
-make pretrained-models/model-formality-email
+```bash
+make pretrained-models/formality-email
 ```
 

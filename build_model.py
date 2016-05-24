@@ -2,16 +2,22 @@ import sys
 import data
 import codecs
 import ujson
+import os
 from model import create_logistic_model, create_regression_model, train_model
 
 
 fn = sys.argv[1]
-model_output_file = sys.argv[2]
+model_output_dir = sys.argv[2]
 problem_type = sys.argv[3]
 use_pretrained_embeddings = True if sys.argv[4].lower() == 'true' else False
 
+try:
+    os.mkdir(model_output_dir)
+except OSError:
+    pass
 
-print >> sys.stderr, fn, model_output_file, problem_type, use_pretrained_embeddings
+
+print >> sys.stderr, fn, model_output_dir, problem_type, use_pretrained_embeddings
 
 
 assert problem_type in ('regression', 'classification'), "Problem type should be either regression or classification"
@@ -34,14 +40,14 @@ else:
     model = create_logistic_model(maxlen, max_features, word_idx, use_pretrained_embeddings)
 
 train_model(model, X_train, y_train, batch_size, nb_epoch)
-model.save_weights(model_output_file)
-word_idx_file = model_output_file + '-word_idx.json'
-ujson.dump(word_idx, codecs.open(word_idx_file, 'w', encoding='utf8'))
+model.save_weights(os.path.join(model_output_dir, 'weights.h5'))
+print >> sys.stderr, "Weights are written"
+
+ujson.dump(word_idx, codecs.open(os.path.join(model_output_dir, 'word_idx.json'), 'w', encoding='utf8'))
+print >> sys.stderr, "word_idx dict is written"
+
 architecture = model.to_json()
-arch_file = model_output_file + '-arch.json'
-open(arch_file, 'w').write(architecture)
+open(os.path.join(model_output_dir, 'architecture.json'), 'w').write(architecture)
+print >> sys.stderr, "Architecture is written"
 
 
-print >> sys.stderr, "Model is saved in {}".format(model_output_file)
-print >> sys.stderr, "Architecture is saved in {}".format(arch_file)
-print >> sys.stderr, "word-idx matrix is saved in {}".format(arch_file)
