@@ -38,13 +38,13 @@ make pretrained-models/formality-email
 Assume that you trained a regressor (or classifier) by using formality email datasets as above. By using this pretrained model, we can predict formality scores of the sentences in news domain. In the `datasets` directory, there is a dataset named `formality-news`. Let's use it as our test data.
 
 ```bash
-make formality-answers.pred MODEL_DIR=pretrained-models/formality-email USE_PRETRAINED_EMBEDDINGS=False
+make formality-news.pred MODEL_DIR=pretrained-models/formality-email USE_PRETRAINED_EMBEDDINGS=False
 ```
 
 If you want to use Word2Vec and if you haven't built any model yet, you may remove providing `USE_PRETRAINED_EMBEDDINGS=False` (since default is `True`):
 
 ```
-make formality-answers.pred MODEL_DIR=pretrained-models/formality-email
+make formality-news.pred MODEL_DIR=pretrained-models/formality-email
 ```
 
 Even you haven't run the command for build a model, `Makefile` finds the dependency path and run the necessary commands for you. Also, it is important that training data for the model building should be somewhat similar with the test data. News and email domains can be significantly different with each other. I used these two datasets just to illustrate the commands.
