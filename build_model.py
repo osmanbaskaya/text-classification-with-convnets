@@ -11,14 +11,7 @@ model_output_dir = sys.argv[2]
 problem_type = sys.argv[3]
 use_pretrained_embeddings = True if sys.argv[4].lower() == 'true' else False
 
-try:
-    os.mkdir(model_output_dir)
-except OSError:
-    pass
-
-
 print >> sys.stderr, fn, model_output_dir, problem_type, use_pretrained_embeddings
-
 
 assert problem_type in ('regression', 'classification'), "Problem type should be either regression or classification"
 
@@ -40,7 +33,7 @@ else:
     model = create_logistic_model(maxlen, max_features, word_idx, use_pretrained_embeddings)
 
 train_model(model, X_train, y_train, batch_size, nb_epoch)
-model.save_weights(os.path.join(model_output_dir, 'weights.h5'))
+model.save_weights(os.path.join(model_output_dir, 'weights.h5'), overwrite=True)
 print >> sys.stderr, "Weights are written"
 
 ujson.dump(word_idx, codecs.open(os.path.join(model_output_dir, 'word_idx.json'), 'w', encoding='utf8'))
