@@ -3,7 +3,7 @@ import numpy as np
 import sys
 
 
-WORD2VEC_PATH = 'GoogleNews-vectors-negative300.bin.gz'
+WORD2VEC_PATH = 'vectors-negative300.bin.gz'
 WORD2VEC_EMB_DIMENSION = 300
 
 

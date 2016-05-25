@@ -1,7 +1,7 @@
 import sys
 import data
 import codecs
-import ujson
+import cPickle
 import os
 from model import create_logistic_model, create_regression_model, train_model
 
@@ -36,7 +36,7 @@ train_model(model, X_train, y_train, batch_size, nb_epoch)
 model.save_weights(os.path.join(model_output_dir, 'weights.h5'), overwrite=True)
 print >> sys.stderr, "Weights are written"
 
-ujson.dump(word_idx, codecs.open(os.path.join(model_output_dir, 'word_idx.json'), 'w', encoding='utf8'))
+cPickle.dump(word_idx, codecs.open(os.path.join(model_output_dir, 'word_idx.json'), 'w', encoding='utf8'))
 print >> sys.stderr, "word_idx dict is written"
 
 architecture = model.to_json()

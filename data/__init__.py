@@ -33,7 +33,7 @@ def read(fn, test_percentage, maxlen, max_features, dataset_type):
     tokenizer = TreebankWordTokenizer()
     c = count(2)
     word_idx = {}
-    lines = codecs.open(fn, encoding='utf8').read().splitlines()
+    lines = codecs.open(fn).read().splitlines()
     y = []
     X = []
     for line in lines:

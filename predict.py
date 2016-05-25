@@ -2,6 +2,7 @@ import os
 import sys
 import ujson
 import codecs
+import cPickle
 from keras.models import model_from_json
 from data import testset_read
 
@@ -24,10 +25,10 @@ model = model_from_json(open(arch_file).read())
 model.load_weights(model_weight_file)
 
 # Read vocabulary (word_idx dict file)
-word_idx = ujson.load(codecs.open(word_idx_file, encoding='utf8'))
+word_idx = cPickle.load(open(word_idx_file))
 
 # Read and transform the test set
-X_test = testset_read(test_fn, word_idx, 25)
+X_test = testset_read(test_fn, word_idx, maxlen)
 
 # Get the predictions for the test set
 predictions = model.predict(X_test)
