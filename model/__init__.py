@@ -39,13 +39,13 @@ def __get_base_model(maxlen, max_features, word_idx, use_pretrained_embeddings=F
         model.add(Embedding(max_features,
                             embedding_dims,
                             input_length=maxlen,
-                            dropout=0.2,
+                            dropout=0.0,
                             weights=[embedding_weights]))
     else:
         model.add(Embedding(max_features,
                             embedding_dims,
                             input_length=maxlen,
-                            dropout=0.2))
+                            dropout=0.0))
 
     # we add a Convolution1D, which will learn nb_filter
     # word group filters of size filter_length:
@@ -62,7 +62,7 @@ def __get_base_model(maxlen, max_features, word_idx, use_pretrained_embeddings=F
 
     # We add a vanilla hidden layer:
     model.add(Dense(hidden_dims))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.2))
     model.add(Activation('relu'))
 
     model.add(Dense(1))
