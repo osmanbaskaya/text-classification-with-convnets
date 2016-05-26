@@ -8,7 +8,10 @@ import numpy as np
 
 def testset_read(fn, word_idx, maxlen):
     tokenizer = TreebankWordTokenizer()
-    lines = codecs.open(fn, encoding='utf8').read().splitlines()
+    try:
+        lines = codecs.open(fn, encoding='utf8').read().splitlines()
+    except UnicodeDecodeError:
+        lines = codecs.open(fn).read().splitlines()
     X = []
     for line in lines:
         s = []
@@ -33,7 +36,10 @@ def read(fn, test_percentage, maxlen, max_features, dataset_type):
     tokenizer = TreebankWordTokenizer()
     c = count(2)
     word_idx = {}
-    lines = codecs.open(fn).read().splitlines()
+    try:
+        lines = codecs.open(fn, encoding='utf8').read().splitlines()
+    except UnicodeDecodeError:
+        lines = codecs.open(fn).read().splitlines()
     y = []
     X = []
     for line in lines:

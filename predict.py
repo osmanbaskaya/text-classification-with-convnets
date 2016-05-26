@@ -1,7 +1,5 @@
 import os
 import sys
-import ujson
-import codecs
 import cPickle
 from keras.models import model_from_json
 from data import testset_read
