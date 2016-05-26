@@ -15,7 +15,7 @@ print >> sys.stderr, fn, model_output_dir, problem_type, use_pretrained_embeddin
 
 assert problem_type in ('regression', 'classification'), "Problem type should be either regression or classification"
 
-maxlen = 20  # maximum length for each sentence.
+maxlen = 25  # maximum length for each sentence.
 max_features = 25000  # length of the vocabulary.
 batch_size = 32
 nb_epoch = 4

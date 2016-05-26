@@ -7,21 +7,28 @@ import numpy as np
 
 
 def testset_read(fn, word_idx, maxlen):
+    total_num_of_unk = 0
     tokenizer = TreebankWordTokenizer()
     try:
         lines = codecs.open(fn, encoding='utf8').read().splitlines()
     except UnicodeDecodeError:
         lines = codecs.open(fn).read().splitlines()
     X = []
+    sentences = []
     for line in lines:
         s = []
         for token in tokenizer.tokenize(line):
             idx = word_idx.get(token, 1)  # 1 is UNKNOWN word id
+            if idx == 1:
+                total_num_of_unk += 1
             s.append(idx)
         X.append(s)
+        sentences.append(line)
 
     X = sequence.pad_sequences(X, maxlen=maxlen)
-    return X
+
+    print >> sys.stderr, "Total number of UNK={}, Avg. {}".format(total_num_of_unk, total_num_of_unk / float(len(sentences)))
+    return X, sentences
 
 
 def read(fn, test_percentage, maxlen, max_features, dataset_type):

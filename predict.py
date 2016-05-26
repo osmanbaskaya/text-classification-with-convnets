@@ -1,4 +1,5 @@
 import os
+from itertools import izip
 import sys
 import cPickle
 from keras.models import model_from_json
@@ -26,11 +27,11 @@ model.load_weights(model_weight_file)
 word_idx = cPickle.load(open(word_idx_file))
 
 # Read and transform the test set
-X_test = testset_read(test_fn, word_idx, maxlen)
+X_test, sentences = testset_read(test_fn, word_idx, maxlen)
 
 # Get the predictions for the test set
 predictions = model.predict(X_test)
 
-for pred in predictions:
-    print pred[0]
+for pred, sentence in izip(predictions, sentences):
+    print sentence, ',', pred[0]
 
